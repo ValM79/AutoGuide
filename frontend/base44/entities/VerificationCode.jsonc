@@ -1,0 +1,58 @@
+{
+  "name": "VerificationCode",
+  "type": "object",
+  "properties": {
+    "target": {
+      "type": "string",
+      "description": "Phone number (E.164) or email address"
+    },
+    "code": {
+      "type": "string",
+      "description": "6-digit verification code"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "sms",
+        "email"
+      ]
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "attempts": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of failed verification attempts"
+    },
+    "client_ip": {
+      "type": "string",
+      "description": "Client IP address for rate limiting"
+    }
+  },
+  "required": [
+    "target",
+    "code",
+    "type",
+    "expires_at"
+  ],
+  "rls": {
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}
