@@ -11,8 +11,11 @@
     "@aws-sdk/lib-dynamodb": "^3.583.0",
     "@aws-sdk/s3-request-presigner": "^3.583.0",
     "aws-jwt-verify": "^4.0.1",
-    "jspdf": "^2.5.2",
+    "jspdf": "^4.2.1",
     "stripe": "^14.25.0",
     "ulid": "^2.3.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
   }
 }

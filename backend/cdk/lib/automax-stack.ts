@@ -253,11 +253,17 @@ export class AutomaxStack extends cdk.Stack {
     // ----------------------------------------------------------------------
     // Lambda — shared config + the 9 ported functions + entity CRUD API
     // ----------------------------------------------------------------------
+    const entryDir = path.join(__dirname, '..', '..', 'lambda');
+
     const nodeFnDefaults: Partial<lambdaNode.NodejsFunctionProps> = {
       runtime: lambda.Runtime.NODEJS_20_X,
       architecture: lambda.Architecture.ARM_64,
       timeout: cdk.Duration.seconds(15),
       memorySize: 256,
+      // lambda/ lives outside the cdk/ project root (sibling directory in the
+      // monorepo), so NodejsFunction can't auto-detect it from cdk/'s own
+      // lockfile — point it at lambda/'s lockfile explicitly.
+      depsLockFilePath: path.join(entryDir, 'package-lock.json'),
       // Bundle the AWS SDK v3 packages ourselves rather than relying on whichever
       // version happens to ship in the Lambda Node20 base image (safer, and
       // @aws-sdk/s3-request-presigner specifically isn't guaranteed to be present).
@@ -275,8 +281,6 @@ export class AutomaxStack extends cdk.Stack {
         APP_ORIGIN: props?.domainName ? `https://${props.domainName}` : `https://${frontendDistribution.distributionDomainName}`,
       },
     };
-
-    const entryDir = path.join(__dirname, '..', '..', 'lambda');
 
     const entityApiFn = new lambdaNode.NodejsFunction(this, 'EntityApiFn', {
       ...nodeFnDefaults,
